@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveCode Export</title>
+    
+    <!-- ============================================ -->
+    <!-- CSS CODE (from the CSS editor)               -->
+    <!-- ============================================ -->
+    <style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Trebuchet MS", sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(
+        135deg,
+        #ffd6e5,
+        #ffc1d9,
+        #ffe6ef,
+        #ffb6d0
+    );
+    color: #a83d65;
+}
+
+/* BACKGROUND */
+
+.background span {
+    position: fixed;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 25px;
+    pointer-events: none;
+    animation: float 8s linear infinite;
+}
+
+.background span:nth-child(1) {
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.background span:nth-child(2) {
+    left: 25%;
+    animation-delay: 2s;
+}
+
+.background span:nth-child(3) {
+    left: 40%;
+    animation-delay: 4s;
+}
+
+.background span:nth-child(4) {
+    left: 55%;
+    animation-delay: 1s;
+}
+
+.background span:nth-child(5) {
+    left: 70%;
+    animation-delay: 3s;
+}
+
+.background span:nth-child(6) {
+    left: 80%;
+    animation-delay: 5s;
+}
+
+.background span:nth-child(7) {
+    left: 90%;
+    animation-delay: 2s;
+}
+
+.background span:nth-child(8) {
+    left: 15%;
+    animation-delay: 6s;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(110vh) rotate(0deg);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-20vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+
+/* PAGES */
+
+.page {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 25px;
+    animation: pageIn 0.6s ease;
+}
+
+.page.active {
+    display: flex;
+}
+
+@keyframes pageIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* TEXT */
+
+h1 {
+    font-size: 30px;
+    margin: 15px 0;
+}
+
+p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+
+/* BUTTON */
+
+button {
+    border: none;
+    background: white;
+    color: #c74775;
+    padding: 13px 25px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 25px;
+    box-shadow: 0 8px 20px rgba(190, 60, 110, 0.15);
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: scale(1.08);
+}
+
+button:active {
+    transform: scale(0.93);
+}
+
+
+/* BEARS */
+
+.sticker {
+    position: absolute;
+    font-size: 75px;
+}
+
+.bubu {
+    left: 12%;
+    top: 20%;
+    animation: bearMove 3s ease-in-out infinite;
+}
+
+.dudu {
+    right: 12%;
+    bottom: 20%;
+    animation: bearMove 3s ease-in-out infinite reverse;
+}
+
+@keyframes bearMove {
+    0%, 100% {
+        transform: translateY(0) rotate(-5deg);
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(5deg);
+    }
+}
+
+.tiny-bear {
+    font-size: 60px;
+    animation: bounce 1.5s infinite;
+}
+
+@keyframes bounce {
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+
+/* PASSWORD */
+
+.lock {
+    font-size: 65px;
+    animation: bounce 1.5s infinite;
+}
+
+.code {
+    margin: 20px;
+    font-size: 28px;
+    letter-spacing: 10px;
+}
+
+.keypad {
+    width: 270px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.keypad button {
+    margin: 0;
+    height: 55px;
+    padding: 0;
+    font-size: 18px;
+}
+
+.wrong {
+    opacity: 0;
+    color: #e04b6f;
+    margin-top: 15px;
+}
+
+.wrong.show {
+    opacity: 1;
+}
+
+
+/* HEART */
+
+.big-heart {
+    font-size: 100px;
+    animation: heartbeat 1.2s infinite;
+}
+
+@keyframes heartbeat {
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+
+/* FIVE */
+
+.number {
+    font-size: 130px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 8px 20px rgba(190, 60, 110, 0.2);
+    animation: bounce 2s infinite;
+}
+
+
+/* CHOICES */
+
+.choices {
+    display: grid;
+    grid-template-columns: repeat(2, 110px);
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.choices button {
+    margin: 0;
+    height: 100px;
+    padding: 10px;
+    font-size: 30px;
+}
+
+.choices small {
+    font-size: 13px;
+}
+
+.result {
+    min-height: 55px;
+    max-width: 320px;
+    margin-top: 20px;
+    color: #a83d65;
+    font-weight: bold;
+}
+
+.next {
+    margin-top: 10px;
+}
+
+
+/* ENVELOPE */
+
+.envelope {
+    position: relative;
+    width: 240px;
+    height: 165px;
+    margin-top: 35px;
+    cursor: pointer;
+    animation: envelopeFloat 2s ease-in-out infinite;
+    filter: drop-shadow(0 12px 15px rgba(180, 60, 100, 0.25));
+}
+
+.envelope:hover {
+    transform: scale(1.08);
+}
+
+.envelope-body {
+    position: absolute;
+    width: 240px;
+    height: 165px;
+    background: #ff8fb5;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+
+/* paper inside */
+
+.letter-paper {
+    position: absolute;
+    width: 170px;
+    height: 120px;
+    background: white;
+    left: 35px;
+    top: 10px;
+    border-radius: 8px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+}
+
+
+/* folds */
+
+.left-fold {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-bottom: 85px solid #ffb0c9;
+    border-right: 120px solid transparent;
+    z-index: 4;
+}
+
+.right-fold {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    border-bottom: 85px solid #ffb0c9;
+    border-left: 120px solid transparent;
+    z-index: 4;
+}
+
+.bottom-fold {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 120px solid transparent;
+    border-right: 120px solid transparent;
+    border-bottom: 95px solid #ff82aa;
+    z-index: 5;
+}
+
+
+/* top flap */
+
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 120px solid transparent;
+    border-right: 120px solid transparent;
+    border-top: 90px solid #ffb6cd;
+    z-index: 6;
+    transform-origin: top;
+    transition: 0.6s;
+}
+
+
+/* envelope opens */
+
+.envelope.open .flap {
+    transform: rotateX(180deg);
+}
+
+.envelope.open {
+    animation: none;
+}
+
+@keyframes envelopeFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(-2deg);
+    }
+
+    50% {
+        transform: translateY(-12px) rotate(2deg);
+    }
+}
+
+.tap {
+    margin-top: 18px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    50% {
+        opacity: 0.4;
+    }
+}
+
+
+/* LETTER */
+
+.letter-card {
+    background: rgba(255,255,255,0.92);
+    width: min(90%, 430px);
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(170, 60, 100, 0.2);
+}
+
+.letter-top {
+    font-size: 50px;
+}
+
+.letter-card h2 {
+    margin: 15px 0;
+}
+
+#letterText {
+    text-align: left;
+    min-height: 170px;
+}
+
+
+/* GIFT */
+
+.gift {
+    font-size: 110px;
+    cursor: pointer;
+    animation: giftBounce 1.5s infinite;
+}
+
+@keyframes giftBounce {
+    0%, 100% {
+        transform: translateY(0) rotate(-5deg);
+    }
+
+    50% {
+        transform: translateY(-18px) rotate(5deg);
+    }
+}
+
+#finalMessage {
+    max-width: 350px;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 18px;
+}
+    </style>
+    <!-- ============================================ -->
+    
+</head>
+<body>
+    <!-- ============================================ -->
+    <!-- HTML CODE (from the HTML editor)             -->
+    <!-- ============================================ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>for my favorite person </title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- BACKGROUND -->
+    <div class="background">
+        <span>♡</span>
+        <span>♡</span>
+        <span>♡</span>
+        <span>✦</span>
+        <span>♡</span>
+        <span>✧</span>
+        <span>♡</span>
+        <span>✦</span>
+    </div>
+
+    <!-- PAGE 1 -->
+    <section class="page active" id="intro">
+        <div class="sticker bubu"></div>
+        <div class="sticker dudu"></div>
+
+        <h1>haiii, babyyy igorot!! </h1>
+        <p>I made something special for yaaaa!</p>
+
+        <button onclick="goTo('password')">
+            tap me :3
+        </button>
+    </section>
+
+
+    <!-- PAGE 2 -->
+    <section class="page" id="password">
+
+        <div class="lock"></div>
+
+        <h1>secret passcode</h1>
+        <p>hint: our special month :3 </p>
+
+        <div class="code" id="codeDisplay">
+            ○ ○ ○ ○
+        </div>
+
+        <div class="keypad">
+            <button onclick="pressKey(1)">1</button>
+            <button onclick="pressKey(2)">2</button>
+            <button onclick="pressKey(3)">3</button>
+
+            <button onclick="pressKey(4)">4</button>
+            <button onclick="pressKey(5)">5</button>
+            <button onclick="pressKey(6)">6</button>
+
+            <button onclick="pressKey(7)">7</button>
+            <button onclick="pressKey(8)">8</button>
+            <button onclick="pressKey(9)">9</button>
+
+            <button onclick="clearCode()">⌫</button>
+            <button onclick="pressKey(0)">0</button>
+            <button onclick="checkCode()">♡</button>
+        </div>
+
+        <p class="wrong" id="wrong">wrong codeee 🙄 </p>
+    </section>
+
+
+    <!-- PAGE 3 -->
+    <section class="page" id="welcome">
+
+        <div class="big-heart"></div>
+
+        <h1>you got it right! </h1>
+
+        <p>
+            welcome babyyy! :3<br>         
+        </p>
+
+        <button onclick="goTo('months')">
+            continue 
+        </button>
+    </section>
+
+
+    <!-- PAGE 4 -->
+    <section class="page" id="months">
+
+        <div class="number">5</div>
+
+        <h1>five months w youuuu </h1>
+
+        <p>
+            5 months of memories,<br>
+            laughs, random talks,<br>
+            and so many little moments.
+        </p>
+
+        <button onclick="goTo('menu')">
+            what's next? 👀
+        </button>
+    </section>
+
+
+    <!-- PAGE 5 -->
+    <section class="page" id="menu">
+
+        <h1>choose oneee </h1>
+        <p>you can tap everything hehehe</p>
+
+        <div class="choices">
+
+            <button onclick="memory()">
+                <br>
+                <small>memory</small>
+            </button>
+
+            <button onclick="message()">
+                <br>
+                <small>message</small>
+            </button>
+
+            <button onclick="reasons()">
+                <br>
+                <small>why you</small>
+            </button>
+
+            <button onclick="secret()">
+                <br>
+                <small>secret</small>
+            </button>
+
+        </div>
+
+        <div class="result" id="result"></div>
+
+        <button class="next" onclick="goTo('envelopePage')">
+            there's one more...👀
+        </button>
+    </section>
+
+
+    <!-- PAGE 6 -->
+    <section class="page" id="envelopePage">
+
+        <div class="tiny-bear"></div>
+
+        <h1>a letter for you </h1>
+
+        <p>tap the envelope to open it</p>
+
+        <!-- REAL CSS ENVELOPE -->
+        <div class="envelope" onclick="openEnvelope()">
+
+            <div class="envelope-body">
+
+                <div class="letter-paper">
+                    
+                </div>
+
+                <div class="left-fold"></div>
+                <div class="right-fold"></div>
+                <div class="bottom-fold"></div>
+
+                <div class="flap"></div>
+
+            </div>
+
+        </div>
+
+        <p class="tap">tap me :3</p>
+
+    </section>
+
+
+    <!-- PAGE 7 -->
+    <section class="page" id="letter">
+
+        <div class="letter-card">
+
+            <div class="letter-top">
+                
+            </div>
+
+            <h2>for you, my babiii!</h2>
+
+            <p id="letterText"></p>
+
+            <button onclick="goTo('final')">
+                one last thing 
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- PAGE 8 -->
+    <section class="page" id="final">
+
+        <div class="gift" onclick="openGift()">
+            
+        </div>
+
+        <h1>waittt...🤨</h1>
+        <p>there's actually one more surprise👀</p>
+
+        <button onclick="openGift()">
+            open this 😁
+        </button>
+
+        <div id="finalMessage"></div>
+
+    </section>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
+    <!-- ============================================ -->
+    
+    <!-- ============================================ -->
+    <!-- JAVASCRIPT CODE (from the JS editor)         -->
+    <!-- ============================================ -->
+    <script>
+/* =========================
+   SETTINGS
+========================= */
+
+const correctCode = "1006";
+
+let enteredCode = "";
+
+
+/* =========================
+   PAGE NAVIGATION
+========================= */
+
+function goTo(pageID) {
+
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    document.getElementById(pageID).classList.add("active");
+
+    hearts(8);
+}
+
+
+/* =========================
+   PASSWORD
+========================= */
+
+function pressKey(number) {
+
+    if (enteredCode.length >= 4) return;
+
+    enteredCode += number;
+
+    updateCode();
+}
+
+
+function updateCode() {
+
+    let display = "";
+
+    for (let i = 0; i < 4; i++) {
+
+        if (i < enteredCode.length) {
+            display += "♥ ";
+        } else {
+            display += "○ ";
+        }
+    }
+
+    document.getElementById("codeDisplay").textContent = display;
+}
+
+
+function clearCode() {
+
+    enteredCode = "";
+
+    updateCode();
+
+    document.getElementById("wrong").classList.remove("show");
+}
+
+
+function checkCode() {
+
+    if (enteredCode === correctCode) {
+
+        hearts(20);
+
+        setTimeout(() => {
+            goTo("welcome");
+        }, 400);
+
+    } else {
+
+        const wrong = document.getElementById("wrong");
+
+        wrong.classList.add("show");
+
+        document.querySelector(".keypad").animate(
+            [
+                { transform: "translateX(0)" },
+                { transform: "translateX(-10px)" },
+                { transform: "translateX(10px)" },
+                { transform: "translateX(0)" }
+            ],
+            {
+                duration: 300
+            }
+        );
+
+        enteredCode = "";
+
+        updateCode();
+    }
+}
+
+
+/* =========================
+   MENU INTERACTIONS
+========================= */
+
+function memory() {
+
+    document.getElementById("result").innerHTML =
+        " every lil moment w you becomes a memory I wanna keep forever";
+}
+
+
+function message() {
+
+    document.getElementById("result").innerHTML =
+        " thank you so matss for staying, understanding me, and being part of my life. I'm super duper really grateful for you.";
+}
+
+
+function reasons() {
+
+    document.getElementById("result").innerHTML =
+        " because you are you. your presence makes ordinary days feel a lil more special.";
+}
+
+
+function secret() {
+
+    document.getElementById("result").innerHTML =
+        " secret unlocked! you are officially my favorite person mwheuehehe";
+}
+
+
+/* =========================
+   ENVELOPE
+========================= */
+
+function openEnvelope() {
+
+    const envelope = document.querySelector(".envelope");
+
+    envelope.classList.add("open");
+
+    hearts(25);
+
+    setTimeout(() => {
+
+        goTo("letter");
+
+        typeLetter();
+
+    }, 700);
+}
+
+
+/* =========================
+   TYPEWRITER LETTER
+========================= */
+
+function typeLetter() {
+
+    const text =
+        "happy 5th monthsary, babyyy! \n\n" +
+        "thank you for all the little things you do, " +
+        "for the laughs, the conversations, and even " +
+        "the random moments that somehow become my favorite memories.\n\n" +
+        "five months may not sound like a lifetime, " +
+        "but I'm really happy that I got to spend these months with you.\n\n" +
+        "I hope we continue making more memories together. " +
+        "please always take care of yourself, oteyyy?:3\n\n" +
+        "happy 5 months to usss! ";
+
+    const element = document.getElementById("letterText");
+
+    element.innerHTML = "";
+
+    let i = 0;
+
+    function type() {
+
+        if (i < text.length) {
+
+            if (text[i] === "\n") {
+                element.innerHTML += "<br>";
+            } else {
+                element.innerHTML += text[i];
+            }
+
+            i++;
+
+            setTimeout(type, 25);
+        }
+    }
+
+    type();
+}
+
+
+/* =========================
+   GIFT
+========================= */
+
+function openGift() {
+
+    const gift = document.querySelector(".gift");
+
+    gift.innerHTML = "";
+
+    gift.animate(
+        [
+            { transform: "scale(1)" },
+            { transform: "scale(1.3)" },
+            { transform: "scale(1)" }
+        ],
+        {
+            duration: 600
+        }
+    );
+
+    hearts(40);
+
+    document.getElementById("finalMessage").innerHTML =
+        "surpwiseee:3! <br><br>" +
+        "thank you for being part of my life. " +
+        "here's to more laughs, memories, and moments together. <br><br>" +
+        "happy 5th monthsary, babiii bahoo!";
+}
+
+
+/* =========================
+   FLOATING HEARTS
+========================= */
+
+function hearts(amount) {
+
+    for (let i = 0; i < amount; i++) {
+
+        const heart = document.createElement("div");
+
+        heart.innerHTML = Math.random() > 0.5 ? "♡" : "♥";
+
+        heart.style.position = "fixed";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.bottom = "-30px";
+        heart.style.fontSize = (15 + Math.random() * 25) + "px";
+        heart.style.color = "white";
+        heart.style.pointerEvents = "none";
+        heart.style.zIndex = "9999";
+
+        document.body.appendChild(heart);
+
+        const duration = 2000 + Math.random() * 2500;
+
+        heart.animate(
+            [
+                {
+                    transform: "translateY(0) rotate(0deg)",
+                    opacity: 0
+                },
+                {
+                    transform:
+                        `translateY(-${window.innerHeight + 100}px) rotate(360deg)`,
+                    opacity: 1
+                }
+            ],
+            {
+                duration: duration,
+                easing: "ease-out"
+            }
+        );
+
+        setTimeout(() => {
+            heart.remove();
+        }, duration);
+    }
+}
+
+
+/* =========================
+   START
+========================= */
+
+hearts(15);
+    </script>
+    <!-- ============================================ -->
+    
+</body>
+</html>
